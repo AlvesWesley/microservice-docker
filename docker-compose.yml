@@ -27,6 +27,7 @@ services:
     environment:
       - PORT=3001
       - HOST=localhost
+    command: npm start
     networks:
       - microsservices
   # microservice 3
