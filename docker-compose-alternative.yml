@@ -1,0 +1,43 @@
+# docker-compose 2
+# This docker-compose creates an image from the Dockerfile within the directory of each service
+# To use this docker-compose rename this file to docker-compose.yml
+
+version: '3'
+networks:
+  microsservices:
+services:
+  api:
+    build: api_gateway
+    image: api:1.0.0
+    volumes:
+      - ./api_gateway:/api_gateway
+    working_dir: /api_gateway
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+      - HOST=localhost
+    networks:
+      - microsservices
+  auth:
+    build: auth
+    image: auth:1.0.0
+    volumes:
+      - ./auth:/auth
+    working_dir: /auth
+    environment:
+      - PORT=3001
+      - HOST=localhost
+    networks:
+      - microsservices
+  service:
+    build: service
+    image: service:1.0.0
+    volumes:
+      - ./service:/service
+    working_dir: /service
+    environment:
+      - PORT=3002
+      - HOST=localhost
+    networks:
+      - microsservices

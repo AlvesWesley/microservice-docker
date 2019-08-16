@@ -1,0 +1,43 @@
+# docker-compose 1
+
+version: '3'
+networks:
+  microsservices:
+services:
+  # microservice 1
+  api:
+    image: node:10.16-alpine
+    volumes:
+      - ./api_gateway:/api_gateway
+    working_dir: /api_gateway
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+      - HOST=localhost
+    command: npm start
+    networks:
+      - microsservices
+  # microservice 2
+  auth:
+    image: node:10.16-alpine
+    volumes:
+      - ./auth:/auth
+    working_dir: /auth
+    environment:
+      - PORT=3001
+      - HOST=localhost
+    networks:
+      - microsservices
+  # microservice 3
+  service:
+    image: node:10.16-alpine
+    volumes:
+      - ./service:/service
+    working_dir: /service
+    environment:
+      - PORT=3002
+      - HOST=localhost
+    command: npm start
+    networks:
+      - microsservices
